@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ OOP — Complete Examination Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050d1a;
+  --bg2: #0a1628;
+  --bg3: #0f1f38;
+  --surface: #0d1b30;
+  --surface2: #132240;
+  --border: #1e3358;
+  --accent: #00d4aa;
+  --accent2: #00b8d4;
+  --accent3: #7c6bff;
+  --warn: #ff6b6b;
+  --gold: #ffd166;
+  --text: #c8deff;
+  --text2: #7a9ec0;
+  --text3: #4a6a8a;
+  --code-bg: #040b16;
+  --green: #4ade80;
+  --orange: #fb923c;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND TEXTURE ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(0,212,170,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 90% 80%, rgba(0,184,212,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(124,107,255,0.02) 0%, transparent 70%);
+  pointer-events:none; z-index:0;
+}
+
+/* ── STICKY NAV ── */
+nav {
+  position: sticky; top:0; z-index:100;
+  background: rgba(5,13,26,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display:none; }
+
+.nav-brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--accent);
+  white-space: nowrap;
+  padding: 1rem 1.5rem 1rem 0;
+  border-right: 1px solid var(--border);
+  margin-right: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+nav a {
+  color: var(--text2);
+  text-decoration: none;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1rem 0.85rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index:1;
+  padding: 5rem 2rem 4rem;
+  max-width: 1100px; margin: 0 auto;
+  text-align: center;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: rgba(0,212,170,0.08);
+  border: 1px solid rgba(0,212,170,0.2);
+  padding: 0.3rem 1rem;
+  border-radius: 2px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  color: #fff;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.hero h1 span { color: var(--accent); }
+
+.hero p {
+  font-size: 1.15rem;
+  color: var(--text2);
+  max-width: 600px; margin: 0 auto 2.5rem;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.6rem;
+  max-width: 900px; margin: 0 auto;
+}
+
+.module-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.7rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text2);
+  text-align: left;
+  letter-spacing: 0.03em;
+  transition: border-color 0.2s, color 0.2s;
+}
+.module-pill:hover { border-color: var(--accent); color: var(--accent); }
+.module-pill .num { color: var(--accent3); margin-right: 0.5rem; }
+
+/* ── MAIN LAYOUT ── */
+main {
+  position: relative; z-index:1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+/* ── MODULE SECTION ── */
+.module {
+  margin-bottom: 5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 3.5rem;
+}
+
+.module-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.module-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: rgba(0,212,170,0.08);
+  border: 1px solid rgba(0,212,170,0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.module h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+/* ── CONTENT SECTIONS ── */
+.section {
+  margin-bottom: 3rem;
+}
+
+.section h3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--accent2);
+  margin-bottom: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent2);
+  letter-spacing: 0.01em;
+}
+
+.section h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--gold);
+  margin: 1.5rem 0 0.7rem;
+}
+
+p { margin-bottom: 1rem; color: var(--text); }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: 4px;
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 3px solid;
+  font-size: 0.95rem;
+}
+.callout.info { background: rgba(0,184,212,0.07); border-color: var(--accent2); }
+.callout.warn { background: rgba(255,107,107,0.07); border-color: var(--warn); }
+.callout.tip  { background: rgba(0,212,170,0.07); border-color: var(--accent); }
+.callout.gold { background: rgba(255,209,102,0.07); border-color: var(--gold); }
+
+.callout strong {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.callout.info strong { color: var(--accent2); }
+.callout.warn strong { color: var(--warn); }
+.callout.tip strong  { color: var(--accent); }
+.callout.gold strong { color: var(--gold); }
+
+/* ── DEFINITION LIST ── */
+.def-list { list-style: none; margin: 1rem 0 1.5rem; }
+.def-list li {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(30,51,88,0.5);
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  font-size: 0.95rem;
+}
+.def-list li:last-child { border-bottom: none; }
+.def-key {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.def-val { color: var(--text2); }
+
+/* ── RULE LIST ── */
+.rule-list { list-style: none; margin: 1rem 0; }
+.rule-list li {
+  padding: 0.5rem 0 0.5rem 1.8rem;
+  position: relative;
+  color: var(--text2);
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(30,51,88,0.3);
+}
+.rule-list li:last-child { border-bottom: none; }
+.rule-list li::before {
+  content: '▸';
+  position: absolute; left: 0;
+  color: var(--accent3);
+  font-size: 0.8rem;
+  top: 0.6rem;
+}
+
+/* ── CODE BLOCK ── */
+.code-wrap {
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.code-header {
+  background: var(--surface2);
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.code-lang {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.code-dots { display: flex; gap: 6px; }
+.code-dots span {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.code-dots span:nth-child(1) { background: #ff5f57; }
+.code-dots span:nth-child(2) { background: #febc2e; }
+.code-dots span:nth-child(3) { background: #28c840; }
+
+pre {
+  background: var(--code-bg);
+  padding: 1.5rem 1.5rem;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  tab-size: 4;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre::-webkit-scrollbar { height: 4px; }
+pre::-webkit-scrollbar-track { background: var(--code-bg); }
+pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Syntax colors */
+.kw  { color: #c792ea; font-weight: 600; }
+.ty  { color: #80cbc4; }
+.fn  { color: #82aaff; }
+.str { color: #c3e88d; }
+.cm  { color: #546e7a; font-style: italic; }
+.num { color: #f78c6c; }
+.op  { color: #89ddff; }
+.pp  { color: #f07178; }
+.cl  { color: #ffcb6b; font-weight: 600; }
+
+/* ── SVG DIAGRAM WRAPPER ── */
+.diagram-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2rem;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.diagram-wrap svg { max-width: 100%; }
+
+/* ── COMPARISON TABLE ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+.compare-table th {
+  background: var(--surface2);
+  color: var(--accent);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.8rem 1.2rem;
+  text-align: left;
+  border-bottom: 2px solid var(--accent);
+}
+.compare-table td {
+  padding: 0.7rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  vertical-align: top;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: rgba(0,212,170,0.03); }
+.compare-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── CHECKLIST ── */
+.checklist { list-style: none; margin: 1rem 0; }
+.checklist li {
+  padding: 0.6rem 0 0.6rem 2.5rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--text2);
+  border-bottom: 1px solid rgba(30,51,88,0.3);
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li::before {
+  content: '☐';
+  position: absolute; left: 0.3rem;
+  color: var(--accent3);
+  font-size: 1rem;
+  top: 0.5rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index:1;
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+}
+
+/* ── INLINE CODE ── */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82em;
+  color: var(--accent);
+  background: rgba(0,212,170,0.08);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.hero { animation: fadeUp 0.6s ease both; }
+.module { animation: fadeUp 0.5s ease both; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .def-list li { grid-template-columns: 1fr; gap: 0.3rem; }
+  pre { font-size: 0.72rem; }
+  .hero { padding: 3rem 1.5rem 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">C++ OOP</div>
+  <a href="#m1">M1 Basics</a>
+  <a href="#m2">M2 Const/Static</a>
+  <a href="#m3">M3 Relations</a>
+  <a href="#m4">M4 Inheritance</a>
+  <a href="#m5">M5 Polymorphism</a>
+  <a href="#m6">M6 Friends</a>
+  <a href="#m7">M7 Operators</a>
+  <a href="#m8">M8 Templates</a>
+  <a href="#m9">M9 Files</a>
+  <a href="#m10">M10 Exceptions</a>
+  <a href="#checklist">Checklist</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">NUCES Karachi · OOP Examination Guide</div>
+  <h1>C++ Object-Oriented<br><span>Programming</span></h1>
+  <p>Complete reference covering all 10 modules — from encapsulation to exception handling. Built for exam preparation.</p>
+  <div class="module-grid">
+    <div class="module-pill"><span class="num">01</span>Encapsulation &amp; Memory</div>
+    <div class="module-pill"><span class="num">02</span>Const &amp; Static Members</div>
+    <div class="module-pill"><span class="num">03</span>Object Relationships</div>
+    <div class="module-pill"><span class="num">04</span>Inheritance Hierarchies</div>
+    <div class="module-pill"><span class="num">05</span>Polymorphism &amp; VTABLE</div>
+    <div class="module-pill"><span class="num">06</span>Friend Functions</div>
+    <div class="module-pill"><span class="num">07</span>Operator Overloading</div>
+    <div class="module-pill"><span class="num">08</span>Generic Templates</div>
+    <div class="module-pill"><span class="num">09</span>File Handling</div>
+    <div class="module-pill"><span class="num">10</span>Exception Handling</div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════════════ MODULE 1 -->
+<section class="module" id="m1">
+  <div class="module-header">
+    <div class="module-number">MODULE 01</div>
+    <h2>Foundational OOP &amp; Object Lifecycle</h2>
+  </div>
+
+  <div class="section">
+    <h3>1.1 Encapsulation &amp; Access Control</h3>
+    <p>Encapsulation wraps data and methods into a single class unit. <strong>Data hiding</strong> restricts access using specifiers:</p>
+    <ul class="def-list">
+      <li><span class="def-key">private</span><span class="def-val">Accessible only within the class itself. Default for class members.</span></li>
+      <li><span class="def-key">protected</span><span class="def-val">Accessible within the class and all derived (child) classes.</span></li>
+      <li><span class="def-key">public</span><span class="def-val">Accessible from anywhere the object is in scope.</span></li>
+    </ul>
+    <p><strong>Getters</strong> (accessors) read private data safely. <strong>Setters</strong> (mutators) write it with optional validation logic, preventing corrupted object state.</p>
+  </div>
+
+  <div class="section">
+    <h3>1.2 Constructors, Copy Semantics &amp; Destructors</h3>
+    <table class="compare-table">
+      <thead><tr><th>Type</th><th>Signature</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Default</td><td><code>ClassName()</code></td><td>No arguments (or all defaulted). Compiler provides one if none defined.</td></tr>
+        <tr><td>Parameterized</td><td><code>ClassName(T a, T b)</code></td><td>Initializes with specific values at instantiation.</td></tr>
+        <tr><td>Copy</td><td><code>ClassName(const ClassName&amp; src)</code></td><td>Creates a new object from an existing one. Must take by reference — passing by value causes infinite recursion.</td></tr>
+        <tr><td>Destructor</td><td><code>~ClassName()</code></td><td>Executes automatically when object goes out of scope or is deleted. Releases heap memory, file handles, connections.</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Shallow Copy vs. Deep Copy</h4>
+
+    <!-- SVG Diagram: Shallow vs Deep -->
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <!-- SHALLOW SIDE -->
+        <text x="90" y="28" fill="#ff6b6b" font-size="13" font-weight="bold" text-anchor="middle" font-family="Syne, sans-serif">SHALLOW COPY ✗</text>
+        <!-- ObjA box -->
+        <rect x="10" y="40" width="110" height="50" rx="4" fill="#0d1b30" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="65" y="58" fill="#c8deff" font-size="10" text-anchor="middle">Object A</text>
+        <text x="65" y="76" fill="#ff6b6b" font-size="9" text-anchor="middle">ptr → 0x4A1F</text>
+        <!-- ObjB box -->
+        <rect x="10" y="110" width="110" height="50" rx="4" fill="#0d1b30" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="65" y="128" fill="#c8deff" font-size="10" text-anchor="middle">Object B (copy)</text>
+        <text x="65" y="146" fill="#ff6b6b" font-size="9" text-anchor="middle">ptr → 0x4A1F</text>
+        <!-- Heap block -->
+        <rect x="148" y="80" width="80" height="50" rx="4" fill="#1a0a0a" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="4"/>
+        <text x="188" y="100" fill="#ff6b6b" font-size="9" text-anchor="middle">HEAP</text>
+        <text x="188" y="115" fill="#c8deff" font-size="9" text-anchor="middle">0x4A1F</text>
+        <text x="188" y="127" fill="#7a9ec0" font-size="8" text-anchor="middle">value=95</text>
+        <!-- Arrows A and B to same heap -->
+        <line x1="120" y1="65" x2="148" y2="100" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#arrowR)"/>
+        <line x1="120" y1="135" x2="148" y2="110" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#arrowR)"/>
+        <!-- warning text -->
+        <text x="90" y="195" fill="#ff6b6b" font-size="9" text-anchor="middle">⚠ Double-free crash!</text>
+        <text x="90" y="210" fill="#ff6b6b" font-size="9" text-anchor="middle">⚠ Dangling pointer!</text>
+        <text x="90" y="225" fill="#ff6b6b" font-size="9" text-anchor="middle">⚠ Shared state mutation!</text>
+
+        <!-- divider -->
+        <line x1="280" y1="20" x2="280" y2="240" stroke="#1e3358" stroke-width="1.5" stroke-dasharray="4"/>
+
+        <!-- DEEP SIDE -->
+        <text x="490" y="28" fill="#00d4aa" font-size="13" font-weight="bold" text-anchor="middle" font-family="Syne, sans-serif">DEEP COPY ✓</text>
+        <!-- ObjA -->
+        <rect x="310" y="40" width="110" height="50" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="365" y="58" fill="#c8deff" font-size="10" text-anchor="middle">Object A</text>
+        <text x="365" y="76" fill="#00d4aa" font-size="9" text-anchor="middle">ptr → 0x3B20</text>
+        <!-- ObjB -->
+        <rect x="310" y="130" width="110" height="50" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="365" y="148" fill="#c8deff" font-size="10" text-anchor="middle">Object B (copy)</text>
+        <text x="365" y="166" fill="#00d4aa" font-size="9" text-anchor="middle">ptr → 0x7C55</text>
+        <!-- Heap A -->
+        <rect x="448" y="40" width="80" height="50" rx="4" fill="#050d1a" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="4"/>
+        <text x="488" y="60" fill="#00d4aa" font-size="9" text-anchor="middle">HEAP A</text>
+        <text x="488" y="75" fill="#c8deff" font-size="9" text-anchor="middle">0x3B20</text>
+        <text x="488" y="87" fill="#7a9ec0" font-size="8" text-anchor="middle">value=95</text>
+        <!-- Heap B -->
+        <rect x="448" y="130" width="80" height="50" rx="4" fill="#050d1a" stroke="#00d4aa" stroke-width="1.5" stroke-dasharray="4"/>
+        <text x="488" y="150" fill="#00d4aa" font-size="9" text-anchor="middle">HEAP B</text>
+        <text x="488" y="165" fill="#c8deff" font-size="9" text-anchor="middle">0x7C55</text>
+        <text x="488" y="177" fill="#7a9ec0" font-size="8" text-anchor="middle">value=95</text>
+        <!-- Arrows -->
+        <line x1="420" y1="65" x2="448" y2="65" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#arrowG)"/>
+        <line x1="420" y1="155" x2="448" y2="155" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#arrowG)"/>
+        <!-- good text -->
+        <text x="490" y="205" fill="#00d4aa" font-size="9" text-anchor="middle">✓ Independent state</text>
+        <text x="490" y="220" fill="#00d4aa" font-size="9" text-anchor="middle">✓ Safe deletion</text>
+        <text x="490" y="235" fill="#00d4aa" font-size="9" text-anchor="middle">✓ No shared pointers</text>
+
+        <defs>
+          <marker id="arrowR" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#ff6b6b"/>
+          </marker>
+          <marker id="arrowG" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="callout warn">
+      <strong>⚠ Critical Pitfall</strong>
+      The compiler's default copy constructor performs a <strong>shallow copy</strong>. When your class manages heap memory with raw pointers, you <em>must</em> write a custom deep copy constructor and overload the assignment operator (Rule of Three).
+    </div>
+  </div>
+
+  <!-- CODE -->
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Deep Copy Constructor</div>
+    </div>
+    <pre><span class="pp">#include &lt;iostream&gt;</span>
+<span class="pp">#include &lt;string&gt;</span>
+
+<span class="kw">class</span> <span class="cl">Student</span> {
+<span class="kw">private</span>:
+    std::<span class="ty">string</span> name;
+    <span class="ty">int</span>* testScore;  <span class="cm">// Raw heap pointer — requires deep copy!</span>
+
+<span class="kw">public</span>:
+    <span class="cm">// Default + Parameterized Constructor</span>
+    <span class="fn">Student</span>(std::<span class="ty">string</span> studentName <span class="op">=</span> <span class="str">"None"</span>, <span class="ty">int</span> score <span class="op">=</span> <span class="num">0</span>) : name(studentName) {
+        testScore <span class="op">=</span> <span class="kw">new</span> <span class="ty">int</span>(score); <span class="cm">// Heap allocation</span>
+    }
+
+    <span class="cm">// ✓ Deep Copy Constructor</span>
+    <span class="fn">Student</span>(<span class="kw">const</span> <span class="cl">Student</span><span class="op">&amp;</span> other) {
+        name <span class="op">=</span> other.name;
+        testScore <span class="op">=</span> <span class="kw">new</span> <span class="ty">int</span>(<span class="op">*</span>(other.testScore)); <span class="cm">// NEW allocation — separate memory!</span>
+    }
+
+    <span class="cm">// Destructor prevents memory leak</span>
+    <span class="op">~</span><span class="fn">Student</span>() { <span class="kw">delete</span> testScore; }
+
+    <span class="kw">void</span> <span class="fn">setScore</span>(<span class="ty">int</span> score) {
+        <span class="kw">if</span> (score <span class="op">&gt;=</span> <span class="num">0</span> <span class="op">&amp;&amp;</span> score <span class="op">&lt;=</span> <span class="num">100</span>) <span class="op">*</span>testScore <span class="op">=</span> score;
+        <span class="kw">else</span> std::cout <span class="op">&lt;&lt;</span> <span class="str">"Invalid score!\n"</span>;
+    }
+
+    <span class="ty">int</span> <span class="fn">getScore</span>() <span class="kw">const</span> { <span class="kw">return</span> <span class="op">*</span>testScore; }
+    std::<span class="ty">string</span> <span class="fn">getName</span>() <span class="kw">const</span> { <span class="kw">return</span> name; }
+};
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="cl">Student</span> A(<span class="str">"Alice"</span>, <span class="num">95</span>);
+    <span class="cl">Student</span> B <span class="op">=</span> A;       <span class="cm">// Calls deep copy constructor</span>
+    B.<span class="fn">setScore</span>(<span class="num">88</span>);
+    std::cout <span class="op">&lt;&lt;</span> A.<span class="fn">getScore</span>();  <span class="cm">// 95 — unchanged ✓</span>
+    std::cout <span class="op">&lt;&lt;</span> B.<span class="fn">getScore</span>();  <span class="cm">// 88 — independent ✓</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 2 -->
+<section class="module" id="m2">
+  <div class="module-header">
+    <div class="module-number">MODULE 02</div>
+    <h2>Const Semantics &amp; Static Members</h2>
+  </div>
+
+  <div class="section">
+    <h3>2.1 Const Fields, Objects &amp; Methods</h3>
+    <ul class="def-list">
+      <li><span class="def-key">const field</span><span class="def-val">Locked after initialization. <strong>Must</strong> be set in the Member Initializer List — not the constructor body.</span></li>
+      <li><span class="def-key">const method</span><span class="def-val">Append <code>const</code> after the signature. Guarantees no data members are modified. Required to be called on const objects.</span></li>
+      <li><span class="def-key">const object</span><span class="def-val">Completely read-only. Can <strong>only</strong> call <code>const</code> methods — calling non-const methods is a compile error.</span></li>
+    </ul>
+    <div class="callout info">
+      <strong>ℹ Why initializer list?</strong>
+      Inside the constructor body, <code>field = value</code> is an <em>assignment</em>, but <code>const</code> variables prohibit assignment after creation. The Member Initializer List runs <em>during</em> construction, before the object exists — so it can set const members directly.
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>2.2 Static Data Members &amp; Static Functions</h3>
+    <ul class="def-list">
+      <li><span class="def-key">static member</span><span class="def-val">Shared across all instances. Lives in global static memory, not per-object. Must be defined and initialized in global scope outside the class.</span></li>
+      <li><span class="def-key">static function</span><span class="def-val">Called via <code>Class::Function()</code> — no object needed. Has <strong>no <code>this</code> pointer</strong>. Can only access other <code>static</code> members.</span></li>
+    </ul>
+    <div class="callout warn">
+      <strong>⚠ Common Exam Trap</strong>
+      Static member functions <strong>cannot</strong> access non-static instance variables (no <code>this</code> pointer exists). Attempting to do so is a compile-time error.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Const &amp; Static Demo</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">HotelCustomer</span> {
+<span class="kw">private</span>:
+    <span class="kw">const</span> std::<span class="ty">string</span> customerName;  <span class="cm">// Must use initializer list!</span>
+    <span class="ty">int</span> daysStayed;
+    <span class="kw">static</span> <span class="ty">int</span> activeBookings;          <span class="cm">// Shared across all objects</span>
+    <span class="kw">static</span> <span class="kw">const</span> <span class="ty">double</span> DAILY_RATE;
+
+<span class="kw">public</span>:
+    <span class="fn">HotelCustomer</span>(std::<span class="ty">string</span> name, <span class="ty">int</span> days)
+        : customerName(name), daysStayed(days) {  <span class="cm">// ← initializer list for const</span>
+        activeBookings<span class="op">++</span>;
+    }
+
+    <span class="ty">double</span> <span class="fn">calculateRent</span>() <span class="kw">const</span> {   <span class="cm">// const method — safe to call on const objects</span>
+        <span class="kw">return</span> daysStayed <span class="op">*</span> DAILY_RATE;
+    }
+
+    <span class="kw">static</span> <span class="ty">int</span> <span class="fn">getActiveBookings</span>() {  <span class="cm">// no `this`, only accesses static members</span>
+        <span class="kw">return</span> activeBookings;
+        <span class="cm">// return daysStayed; // ✗ COMPILE ERROR — non-static in static function</span>
+    }
+};
+
+<span class="cm">// ← Required: define static members outside class at global scope</span>
+<span class="ty">int</span> <span class="cl">HotelCustomer</span>::activeBookings <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">const</span> <span class="ty">double</span> <span class="cl">HotelCustomer</span>::DAILY_RATE <span class="op">=</span> <span class="num">120.50</span>;
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="cl">HotelCustomer</span> c1(<span class="str">"Alice"</span>, <span class="num">5</span>);
+    <span class="cl">HotelCustomer</span> c2(<span class="str">"Bob"</span>, <span class="num">3</span>);
+    std::cout <span class="op">&lt;&lt;</span> <span class="cl">HotelCustomer</span>::<span class="fn">getActiveBookings</span>(); <span class="cm">// 2</span>
+
+    <span class="kw">const</span> <span class="cl">HotelCustomer</span> vip(<span class="str">"VIP"</span>, <span class="num">10</span>);
+    vip.<span class="fn">calculateRent</span>(); <span class="cm">// ✓ const method on const object</span>
+    <span class="cm">// vip.someNonConstMethod(); // ✗ COMPILE ERROR</span>
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 3 -->
+<section class="module" id="m3">
+  <div class="module-header">
+    <div class="module-number">MODULE 03</div>
+    <h2>Object Relationships</h2>
+  </div>
+
+  <!-- SVG: Association / Aggregation / Composition -->
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+      <!-- ASSOCIATION -->
+      <rect x="10" y="30" width="190" height="140" rx="6" fill="#0d1b30" stroke="#1e3358" stroke-width="1"/>
+      <text x="105" y="22" fill="#7c6bff" font-size="12" font-weight="bold" text-anchor="middle" font-family="Syne, sans-serif">Association</text>
+      <rect x="25" y="50" width="70" height="34" rx="3" fill="#0a1628" stroke="#7c6bff" stroke-width="1.5"/>
+      <text x="60" y="72" fill="#c8deff" font-size="10" text-anchor="middle">Bank</text>
+      <rect x="115" y="50" width="70" height="34" rx="3" fill="#0a1628" stroke="#7c6bff" stroke-width="1.5"/>
+      <text x="150" y="72" fill="#c8deff" font-size="10" text-anchor="middle">Account</text>
+      <line x1="95" y1="67" x2="115" y2="67" stroke="#7c6bff" stroke-width="1.5" stroke-dasharray="4"/>
+      <text x="105" y="115" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Loose connection.</text>
+      <text x="105" y="130" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Both objects independent.</text>
+      <text x="105" y="145" fill="#7a9ec0" font-size="8.5" text-anchor="middle">No ownership.</text>
+      <text x="105" y="162" fill="#7c6bff" font-size="8" text-anchor="middle">Lifecycle: independent ↔ independent</text>
+
+      <!-- AGGREGATION -->
+      <rect x="245" y="30" width="190" height="140" rx="6" fill="#0d1b30" stroke="#1e3358" stroke-width="1"/>
+      <text x="340" y="22" fill="#00b8d4" font-size="12" font-weight="bold" text-anchor="middle" font-family="Syne, sans-serif">Aggregation</text>
+      <rect x="260" y="50" width="75" height="34" rx="3" fill="#0a1628" stroke="#00b8d4" stroke-width="1.5"/>
+      <text x="297" y="72" fill="#c8deff" font-size="10" text-anchor="middle">UserGroup</text>
+      <!-- diamond outline -->
+      <polygon points="359,67 367,60 375,67 367,74" fill="none" stroke="#00b8d4" stroke-width="1.5"/>
+      <rect x="378" y="50" width="45" height="34" rx="3" fill="#0a1628" stroke="#00b8d4" stroke-width="1.5"/>
+      <text x="400" y="72" fill="#c8deff" font-size="10" text-anchor="middle">User</text>
+      <line x1="335" y1="67" x2="359" y2="67" stroke="#00b8d4" stroke-width="1.5"/>
+      <line x1="375" y1="67" x2="378" y2="67" stroke="#00b8d4" stroke-width="1.5"/>
+      <text x="340" y="115" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Has-A (weak).</text>
+      <text x="340" y="130" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Child survives parent deletion.</text>
+      <text x="340" y="145" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Pointer/reference member.</text>
+      <text x="340" y="162" fill="#00b8d4" font-size="8" text-anchor="middle">Parent dies → Child survives ✓</text>
+
+      <!-- COMPOSITION -->
+      <rect x="480" y="30" width="190" height="140" rx="6" fill="#0d1b30" stroke="#1e3358" stroke-width="1"/>
+      <text x="575" y="22" fill="#00d4aa" font-size="12" font-weight="bold" text-anchor="middle" font-family="Syne, sans-serif">Composition</text>
+      <rect x="495" y="50" width="50" height="34" rx="3" fill="#0a1628" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="520" y="72" fill="#c8deff" font-size="10" text-anchor="middle">Car</text>
+      <!-- filled diamond -->
+      <polygon points="563,67 571,60 579,67 571,74" fill="#00d4aa" stroke="#00d4aa" stroke-width="1"/>
+      <rect x="582" y="50" width="70" height="34" rx="3" fill="#0a1628" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="617" y="72" fill="#c8deff" font-size="10" text-anchor="middle">Engine</text>
+      <line x1="545" y1="67" x2="563" y2="67" stroke="#00d4aa" stroke-width="1.5"/>
+      <line x1="579" y1="67" x2="582" y2="67" stroke="#00d4aa" stroke-width="1.5"/>
+      <text x="575" y="115" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Part-Of (strong).</text>
+      <text x="575" y="130" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Child cannot exist alone.</text>
+      <text x="575" y="145" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Direct member variable.</text>
+      <text x="575" y="162" fill="#00d4aa" font-size="8" text-anchor="middle">Parent dies → Child dies ✗</text>
+    </svg>
+  </div>
+
+  <table class="compare-table">
+    <thead><tr><th>Type</th><th>Ownership</th><th>Lifecycle</th><th>Implementation</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>Association</td><td>None</td><td>Independent</td><td>Pass by reference/pointer as parameter</td><td>Bank ↔ Account</td></tr>
+      <tr><td>Aggregation</td><td>Weak (Has-A)</td><td>Child survives parent</td><td>Pointer/reference member variable</td><td>UserGroup → User*</td></tr>
+      <tr><td>Composition</td><td>Strong (Part-Of)</td><td>Child destroyed with parent</td><td>Direct member variable (by value)</td><td>Car owns Engine</td></tr>
+    </tbody>
+  </table>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Aggregation vs Composition in a Car</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">Engine</span> {              <span class="cm">// Will be COMPOSED into Car</span>
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">status</span>() <span class="kw">const</span> { std::cout <span class="op">&lt;&lt;</span> <span class="str">"Engine running\n"</span>; }
+};
+
+<span class="kw">class</span> <span class="cl">Wheel</span> {               <span class="cm">// Will be AGGREGATED into Car</span>
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">roll</span>() <span class="kw">const</span> { std::cout <span class="op">&lt;&lt;</span> <span class="str">"Rolling\n"</span>; }
+};
+
+<span class="kw">class</span> <span class="cl">Car</span> {
+<span class="kw">private</span>:
+    <span class="cl">Engine</span> carEngine;             <span class="cm">// COMPOSITION — direct member, owned fully</span>
+    std::vector&lt;<span class="cl">Wheel</span><span class="op">*</span>&gt; wheels;   <span class="cm">// AGGREGATION — pointers to external objects</span>
+<span class="kw">public</span>:
+    <span class="fn">Car</span>(std::vector&lt;<span class="cl">Wheel</span><span class="op">*</span>&gt;<span class="op">&amp;</span> w) : wheels(w) {}
+    <span class="op">~</span><span class="fn">Car</span>() {
+        std::cout <span class="op">&lt;&lt;</span> <span class="str">"Car destroyed — Engine gone too\n"</span>;
+        <span class="cm">// Wheel objects are NOT deleted — they live independently</span>
+    }
+};
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="cl">Wheel</span> w1, w2, w3, w4;
+    std::vector&lt;<span class="cl">Wheel</span><span class="op">*</span>&gt; wheels <span class="op">=</span> {<span class="op">&amp;</span>w1, <span class="op">&amp;</span>w2, <span class="op">&amp;</span>w3, <span class="op">&amp;</span>w4};
+    {
+        <span class="cl">Car</span> myCar(wheels);  <span class="cm">// Car + Engine created</span>
+    }   <span class="cm">// ← Car and Engine destroyed here; w1-w4 still alive</span>
+    w1.<span class="fn">roll</span>();  <span class="cm">// ✓ Wheel survived (aggregation)</span>
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 4 -->
+<section class="module" id="m4">
+  <div class="module-header">
+    <div class="module-number">MODULE 04</div>
+    <h2>Inheritance &amp; Class Hierarchies</h2>
+  </div>
+
+  <div class="section">
+    <h3>4.1 Constructor &amp; Destructor Execution Order</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <!-- Construction -->
+        <text x="150" y="20" fill="#00d4aa" font-size="11" font-weight="bold" text-anchor="middle" font-family="Syne,sans-serif">CONSTRUCTION ORDER</text>
+        <rect x="20" y="32" width="110" height="32" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="75" y="53" fill="#c8deff" font-size="10" text-anchor="middle">GrandParent()</text>
+        <line x1="130" y1="48" x2="155" y2="48" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#a1)"/>
+        <rect x="155" y="32" width="90" height="32" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="200" y="53" fill="#c8deff" font-size="10" text-anchor="middle">Parent()</text>
+        <line x1="245" y1="48" x2="270" y2="48" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#a1)"/>
+        <rect x="270" y="32" width="90" height="32" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="315" y="53" fill="#c8deff" font-size="10" text-anchor="middle">Child()</text>
+        <text x="175" y="90" fill="#7a9ec0" font-size="9" text-anchor="middle">Base initializes first → Derived uses safely initialized base</text>
+
+        <!-- Destruction -->
+        <text x="490" y="20" fill="#ff6b6b" font-size="11" font-weight="bold" text-anchor="middle" font-family="Syne,sans-serif">DESTRUCTION ORDER</text>
+        <rect x="380" y="32" width="90" height="32" rx="4" fill="#0d1b30" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="425" y="53" fill="#c8deff" font-size="10" text-anchor="middle">~Child()</text>
+        <line x1="470" y1="48" x2="495" y2="48" stroke="#ff6b6b" stroke-width="1.5" marker-end="url(#a2)"/>
+        <rect x="495" y="32" width="90" height="32" rx="4" fill="#0d1b30" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="540" y="53" fill="#c8deff" font-size="10" text-anchor="middle">~Parent()</text>
+        <text x="470" y="90" fill="#7a9ec0" font-size="9" text-anchor="middle">Reverse order — derived cleans up first</text>
+
+        <defs>
+          <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+          </marker>
+          <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#ff6b6b"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>4.2 The Diamond Problem &amp; Virtual Inheritance</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <!-- GrandParent -->
+        <rect x="150" y="10" width="100" height="36" rx="4" fill="#0d1b30" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="200" y="33" fill="#ff6b6b" font-size="11" text-anchor="middle">GrandParent A</text>
+        <!-- Line to B -->
+        <line x1="185" y1="46" x2="110" y2="90" stroke="#ff6b6b" stroke-width="1.5"/>
+        <!-- Line to C -->
+        <line x1="215" y1="46" x2="290" y2="90" stroke="#ff6b6b" stroke-width="1.5"/>
+        <!-- Parent B -->
+        <rect x="60" y="90" width="100" height="36" rx="4" fill="#0d1b30" stroke="#ffd166" stroke-width="1.5"/>
+        <text x="110" y="113" fill="#ffd166" font-size="11" text-anchor="middle">Parent B</text>
+        <!-- Parent C -->
+        <rect x="240" y="90" width="100" height="36" rx="4" fill="#0d1b30" stroke="#ffd166" stroke-width="1.5"/>
+        <text x="290" y="113" fill="#ffd166" font-size="11" text-anchor="middle">Parent C</text>
+        <!-- Line to D -->
+        <line x1="110" y1="126" x2="185" y2="170" stroke="#ffd166" stroke-width="1.5"/>
+        <line x1="290" y1="126" x2="215" y2="170" stroke="#ffd166" stroke-width="1.5"/>
+        <!-- Child D -->
+        <rect x="150" y="170" width="100" height="36" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="200" y="193" fill="#00d4aa" font-size="11" text-anchor="middle">Child D</text>
+        <!-- warning -->
+        <text x="200" y="225" fill="#ff6b6b" font-size="9" text-anchor="middle">Without virtual: D gets TWO copies of A → ambiguity!</text>
+        <!-- virtual label -->
+        <text x="85" y="86" fill="#00d4aa" font-size="8" font-style="italic">virtual</text>
+        <text x="255" y="86" fill="#00d4aa" font-size="8" font-style="italic">virtual</text>
+      </svg>
+    </div>
+
+    <div class="callout tip">
+      <strong>✓ Fix: Virtual Inheritance</strong>
+      Declare intermediate parents as <code>virtual public GrandParent</code>. This ensures only <strong>one shared instance</strong> of GrandParent exists in Child D. Child D must then directly initialize GrandParent in its own initializer list.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Diamond Problem with Virtual Inheritance</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">GrandParent</span> {
+<span class="kw">public</span>:
+    <span class="ty">int</span> sharedValue;
+    <span class="fn">GrandParent</span>(<span class="ty">int</span> val) : sharedValue(val) {}
+};
+
+<span class="kw">class</span> <span class="cl">ParentB</span> : <span class="kw">virtual</span> <span class="kw">public</span> <span class="cl">GrandParent</span> {   <span class="cm">// ← virtual keyword</span>
+<span class="kw">public</span>:
+    <span class="fn">ParentB</span>(<span class="ty">int</span> v) : <span class="cl">GrandParent</span>(v) {}
+};
+
+<span class="kw">class</span> <span class="cl">ParentC</span> : <span class="kw">virtual</span> <span class="kw">public</span> <span class="cl">GrandParent</span> {   <span class="cm">// ← virtual keyword</span>
+<span class="kw">public</span>:
+    <span class="fn">ParentC</span>(<span class="ty">int</span> v) : <span class="cl">GrandParent</span>(v) {}
+};
+
+<span class="kw">class</span> <span class="cl">ChildD</span> : <span class="kw">public</span> <span class="cl">ParentB</span>, <span class="kw">public</span> <span class="cl">ParentC</span> {
+<span class="kw">public</span>:
+    <span class="cm">// ChildD must initialize GrandParent DIRECTLY with virtual inheritance</span>
+    <span class="fn">ChildD</span>(<span class="ty">int</span> v) : <span class="cl">GrandParent</span>(v), <span class="cl">ParentB</span>(v), <span class="cl">ParentC</span>(v) {}
+
+    <span class="kw">void</span> <span class="fn">print</span>() {
+        std::cout <span class="op">&lt;&lt;</span> sharedValue;  <span class="cm">// ✓ No ambiguity — single shared copy</span>
+        <span class="cm">// Without virtual: this line would FAIL to compile</span>
+    }
+};</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 5 -->
+<section class="module" id="m5">
+  <div class="module-header">
+    <div class="module-number">MODULE 05</div>
+    <h2>Polymorphism, Virtual Tables &amp; Dynamic Binding</h2>
+  </div>
+
+  <div class="section">
+    <h3>5.1 Overloading vs. Overriding</h3>
+    <table class="compare-table">
+      <thead><tr><th>Feature</th><th>Overloading</th><th>Overriding</th></tr></thead>
+      <tbody>
+        <tr><td>Type</td><td>Static (Compile-time)</td><td>Dynamic (Runtime)</td></tr>
+        <tr><td>Scope</td><td>Same class, same name</td><td>Base class → Derived class</td></tr>
+        <tr><td>Signature</td><td>Different parameters</td><td>Identical signature</td></tr>
+        <tr><td>Keyword</td><td>None required</td><td><code>virtual</code> in base, <code>override</code> in derived</td></tr>
+        <tr><td>Resolution</td><td>Compiler resolves at compile time</td><td>Resolved at runtime via vptr → VTABLE</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h3>5.2 The VTABLE &amp; vptr Mechanism</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <!-- Base Object -->
+        <rect x="10" y="30" width="130" height="80" rx="4" fill="#0d1b30" stroke="#7c6bff" stroke-width="1.5"/>
+        <text x="75" y="22" fill="#7c6bff" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">Base Object</text>
+        <rect x="20" y="40" width="110" height="22" rx="2" fill="#0a1628" stroke="#7c6bff" stroke-width="1"/>
+        <text x="75" y="55" fill="#00d4aa" font-size="9" text-anchor="middle">vptr →</text>
+        <text x="75" y="78" fill="#7a9ec0" font-size="8.5" text-anchor="middle">int data</text>
+        <text x="75" y="95" fill="#7a9ec0" font-size="8.5" text-anchor="middle">...</text>
+
+        <!-- Derived Object -->
+        <rect x="10" y="140" width="130" height="60" rx="4" fill="#0d1b30" stroke="#00b8d4" stroke-width="1.5"/>
+        <text x="75" y="132" fill="#00b8d4" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">Derived Object</text>
+        <rect x="20" y="150" width="110" height="22" rx="2" fill="#0a1628" stroke="#00b8d4" stroke-width="1"/>
+        <text x="75" y="165" fill="#00d4aa" font-size="9" text-anchor="middle">vptr →</text>
+        <text x="75" y="187" fill="#7a9ec0" font-size="8.5" text-anchor="middle">extra members</text>
+
+        <!-- Base VTABLE -->
+        <rect x="200" y="20" width="150" height="80" rx="4" fill="#050d1a" stroke="#7c6bff" stroke-width="1.5"/>
+        <text x="275" y="14" fill="#7c6bff" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">Base VTABLE</text>
+        <rect x="210" y="30" width="130" height="20" rx="2" fill="#0d1b30"/>
+        <text x="275" y="44" fill="#ffd166" font-size="8.5" text-anchor="middle">[0] Base::work() addr</text>
+        <rect x="210" y="55" width="130" height="20" rx="2" fill="#0d1b30"/>
+        <text x="275" y="69" fill="#ffd166" font-size="8.5" text-anchor="middle">[1] Base::~Base() addr</text>
+        <rect x="210" y="78" width="130" height="18" rx="2" fill="#0d1b30"/>
+        <text x="275" y="91" fill="#ffd166" font-size="8.5" text-anchor="middle">[2] ...</text>
+
+        <!-- Derived VTABLE -->
+        <rect x="200" y="130" width="150" height="70" rx="4" fill="#050d1a" stroke="#00b8d4" stroke-width="1.5"/>
+        <text x="275" y="124" fill="#00b8d4" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">Derived VTABLE</text>
+        <rect x="210" y="140" width="130" height="20" rx="2" fill="#0d1b30"/>
+        <text x="275" y="154" fill="#00d4aa" font-size="8.5" text-anchor="middle">[0] Derived::work() addr</text>
+        <rect x="210" y="163" width="130" height="20" rx="2" fill="#0d1b30"/>
+        <text x="275" y="177" fill="#00d4aa" font-size="8.5" text-anchor="middle">[1] Derived::~Derived()</text>
+
+        <!-- Arrows: vptrs to VTABLEs -->
+        <line x1="140" y1="51" x2="200" y2="55" stroke="#7c6bff" stroke-width="1.5" marker-end="url(#av)"/>
+        <line x1="140" y1="161" x2="200" y2="165" stroke="#00b8d4" stroke-width="1.5" marker-end="url(#ab)"/>
+
+        <!-- Arrows: VTABLE to code -->
+        <rect x="420" y="25" width="210" height="34" rx="4" fill="#0a1628" stroke="#ffd166" stroke-width="1"/>
+        <text x="525" y="43" fill="#ffd166" font-size="9" text-anchor="middle">void Base::work() { ... generic ... }</text>
+        <rect x="420" y="135" width="210" height="34" rx="4" fill="#0a1628" stroke="#00d4aa" stroke-width="1"/>
+        <text x="525" y="153" fill="#00d4aa" font-size="9" text-anchor="middle">void Derived::work() { ... custom ... }</text>
+
+        <line x1="350" y1="40" x2="420" y2="42" stroke="#ffd166" stroke-width="1" stroke-dasharray="3" marker-end="url(#ag)"/>
+        <line x1="350" y1="150" x2="420" y2="152" stroke="#00d4aa" stroke-width="1" stroke-dasharray="3" marker-end="url(#ac)"/>
+
+        <text x="400" y="205" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Runtime dispatch: ptr→vptr→VTABLE[i]→correct function code</text>
+
+        <defs>
+          <marker id="av" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#7c6bff"/>
+          </marker>
+          <marker id="ab" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00b8d4"/>
+          </marker>
+          <marker id="ag" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#ffd166"/>
+          </marker>
+          <marker id="ac" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="callout warn">
+      <strong>⚠ Always Use Virtual Destructors</strong>
+      If you delete a derived object through a base class pointer and the base destructor is <strong>not</strong> virtual, only the base destructor runs — derived heap allocations are leaked. Mark base destructors <code>virtual ~Base()</code>.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Virtual Dispatch &amp; Virtual Destructor</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">BaseEmployee</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> <span class="op">~</span><span class="fn">BaseEmployee</span>() { std::cout <span class="op">&lt;&lt;</span> <span class="str">"Base destructor\n"</span>; }
+    <span class="kw">virtual</span> <span class="kw">void</span> <span class="fn">processWork</span>() <span class="kw">const</span> {
+        std::cout <span class="op">&lt;&lt;</span> <span class="str">"Generic admin work\n"</span>;
+    }
+};
+
+<span class="kw">class</span> <span class="cl">SoftwareDeveloper</span> : <span class="kw">public</span> <span class="cl">BaseEmployee</span> {
+    <span class="ty">int</span><span class="op">*</span> codebase;
+<span class="kw">public</span>:
+    <span class="fn">SoftwareDeveloper</span>() { codebase <span class="op">=</span> <span class="kw">new</span> <span class="ty">int</span>[<span class="num">500</span>]; }
+    <span class="op">~</span><span class="fn">SoftwareDeveloper</span>() <span class="kw">override</span> {
+        <span class="kw">delete</span>[] codebase;  <span class="cm">// ✓ Called FIRST due to virtual destructor</span>
+        std::cout <span class="op">&lt;&lt;</span> <span class="str">"Derived destructor\n"</span>;
+    }
+    <span class="kw">void</span> <span class="fn">processWork</span>() <span class="kw">const</span> <span class="kw">override</span> {
+        std::cout <span class="op">&lt;&lt;</span> <span class="str">"Writing C++ code\n"</span>;
+    }
+};
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="cl">BaseEmployee</span><span class="op">*</span> w <span class="op">=</span> <span class="kw">new</span> <span class="cl">SoftwareDeveloper</span>();
+    w<span class="op">-&gt;</span><span class="fn">processWork</span>(); <span class="cm">// Runtime: "Writing C++ code" (via vptr/VTABLE)</span>
+    <span class="kw">delete</span> w;         <span class="cm">// ✓ Derived destructor runs first, then Base</span>
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 6 -->
+<section class="module" id="m6">
+  <div class="module-header">
+    <div class="module-number">MODULE 06</div>
+    <h2>Friend Functions &amp; Friend Classes</h2>
+  </div>
+
+  <div class="section">
+    <h3>6.1 Three Rules of Friendship</h3>
+    <ul class="rule-list">
+      <li><strong>Granted, not taken:</strong> Class A must explicitly declare another class/function as its friend. The external entity cannot self-declare friendship.</li>
+      <li><strong>Not symmetric:</strong> If A declares B as friend, B can read A's private data — but A cannot read B's private data.</li>
+      <li><strong>Not transitive:</strong> If A friends B and B friends C, C does NOT automatically get access to A's private data.</li>
+    </ul>
+    <div class="callout warn">
+      <strong>⚠ Encapsulation Trade-off</strong>
+      Friend declarations bypass access controls and expose private internals to external scopes. Overuse makes code fragile — changes to private members cascade into all friend implementations.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Friend Function &amp; Friend Member Function</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">SecretVault</span>;       <span class="cm">// Forward declaration needed</span>
+
+<span class="kw">class</span> <span class="cl">Auditor</span> {
+<span class="kw">public</span>:
+    <span class="kw">void</span> <span class="fn">reviewVault</span>(<span class="kw">const</span> <span class="cl">SecretVault</span><span class="op">&amp;</span> vault);
+};
+
+<span class="kw">class</span> <span class="cl">SecretVault</span> {
+<span class="kw">private</span>:
+    std::<span class="ty">string</span> encryptionKey;
+    <span class="ty">double</span> cashBalance;
+<span class="kw">public</span>:
+    <span class="fn">SecretVault</span>(std::<span class="ty">string</span> k, <span class="ty">double</span> b) : encryptionKey(k), cashBalance(b) {}
+
+    <span class="cm">// 1. Global function declared as friend</span>
+    <span class="kw">friend</span> <span class="kw">void</span> <span class="fn">globalLeak</span>(<span class="kw">const</span> <span class="cl">SecretVault</span><span class="op">&amp;</span> v);
+
+    <span class="cm">// 2. Member function of Auditor declared as friend</span>
+    <span class="kw">friend</span> <span class="kw">void</span> <span class="cl">Auditor</span>::<span class="fn">reviewVault</span>(<span class="kw">const</span> <span class="cl">SecretVault</span><span class="op">&amp;</span> v);
+};
+
+<span class="cm">// Note: `friend` keyword NOT used in the definition, only in declaration inside the class</span>
+<span class="kw">void</span> <span class="fn">globalLeak</span>(<span class="kw">const</span> <span class="cl">SecretVault</span><span class="op">&amp;</span> v) {
+    std::cout <span class="op">&lt;&lt;</span> v.encryptionKey;  <span class="cm">// ✓ Accesses private member</span>
+}
+
+<span class="kw">void</span> <span class="cl">Auditor</span>::<span class="fn">reviewVault</span>(<span class="kw">const</span> <span class="cl">SecretVault</span><span class="op">&amp;</span> v) {
+    std::cout <span class="op">&lt;&lt;</span> v.cashBalance;    <span class="cm">// ✓ Accesses private member</span>
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 7 -->
+<section class="module" id="m7">
+  <div class="module-header">
+    <div class="module-number">MODULE 07</div>
+    <h2>Operator Overloading</h2>
+  </div>
+
+  <div class="section">
+    <h3>7.1 Unary Operators</h3>
+    <table class="compare-table">
+      <thead><tr><th>Operator</th><th>Signature</th><th>Behavior</th></tr></thead>
+      <tbody>
+        <tr><td>Prefix <code>++obj</code></td><td><code>ClassName&amp; operator++()</code></td><td>Increments first, returns reference to updated object.</td></tr>
+        <tr><td>Postfix <code>obj++</code></td><td><code>ClassName operator++(int)</code></td><td>Saves a copy, increments, returns the old copy by value. Dummy <code>int</code> parameter distinguishes it.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>7.2 Stream Operators (Must be Friend Functions)</h3>
+    <div class="callout info">
+      <strong>ℹ Why friend?</strong>
+      <code>&lt;&lt;</code> and <code>&gt;&gt;</code> have <code>ostream/istream</code> as the left-hand operand. Since you can't modify those library classes, these operators <em>must</em> be global (non-member) friend functions that take the stream by reference and return it to allow chaining: <code>cout &lt;&lt; v1 &lt;&lt; v2</code>.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Full Operator Overloading (Binary, Unary, Stream)</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">Vector2D</span> {
+<span class="kw">private</span>:
+    <span class="ty">int</span> x, y;
+<span class="kw">public</span>:
+    <span class="fn">Vector2D</span>(<span class="ty">int</span> x <span class="op">=</span> <span class="num">0</span>, <span class="ty">int</span> y <span class="op">=</span> <span class="num">0</span>) : x(x), y(y) {}
+
+    <span class="cm">// Binary + as member function (left side = this object)</span>
+    <span class="cl">Vector2D</span> <span class="kw">operator</span><span class="op">+</span>(<span class="kw">const</span> <span class="cl">Vector2D</span><span class="op">&amp;</span> rhs) <span class="kw">const</span> {
+        <span class="kw">return</span> <span class="cl">Vector2D</span>(x <span class="op">+</span> rhs.x, y <span class="op">+</span> rhs.y);
+    }
+
+    <span class="cm">// Prefix ++ → increment first, return updated object by reference</span>
+    <span class="cl">Vector2D</span><span class="op">&amp;</span> <span class="kw">operator</span><span class="op">++</span>() {
+        x<span class="op">++</span>; y<span class="op">++</span>;
+        <span class="kw">return</span> <span class="op">*</span><span class="kw">this</span>;
+    }
+
+    <span class="cm">// Postfix ++ → save copy, increment, return OLD copy by value</span>
+    <span class="cl">Vector2D</span> <span class="kw">operator</span><span class="op">++</span>(<span class="ty">int</span>) {  <span class="cm">// dummy int distinguishes postfix</span>
+        <span class="cl">Vector2D</span> temp <span class="op">=</span> <span class="op">*</span><span class="kw">this</span>;
+        x<span class="op">++</span>; y<span class="op">++</span>;
+        <span class="kw">return</span> temp;             <span class="cm">// old value before increment</span>
+    }
+
+    <span class="cm">// Stream operators MUST be non-member friends</span>
+    <span class="kw">friend</span> std::<span class="ty">ostream</span><span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&lt;&lt;</span>(std::<span class="ty">ostream</span><span class="op">&amp;</span> out, <span class="kw">const</span> <span class="cl">Vector2D</span><span class="op">&amp;</span> v);
+    <span class="kw">friend</span> std::<span class="ty">istream</span><span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&gt;&gt;</span>(std::<span class="ty">istream</span><span class="op">&amp;</span> in, <span class="cl">Vector2D</span><span class="op">&amp;</span> v);
+};
+
+std::<span class="ty">ostream</span><span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&lt;&lt;</span>(std::<span class="ty">ostream</span><span class="op">&amp;</span> out, <span class="kw">const</span> <span class="cl">Vector2D</span><span class="op">&amp;</span> v) {
+    out <span class="op">&lt;&lt;</span> <span class="str">"("</span> <span class="op">&lt;&lt;</span> v.x <span class="op">&lt;&lt;</span> <span class="str">", "</span> <span class="op">&lt;&lt;</span> v.y <span class="op">&lt;&lt;</span> <span class="str">")"</span>;
+    <span class="kw">return</span> out;  <span class="cm">// return stream to allow chaining: cout &lt;&lt; v1 &lt;&lt; v2</span>
+}
+
+std::<span class="ty">istream</span><span class="op">&amp;</span> <span class="kw">operator</span><span class="op">&gt;&gt;</span>(std::<span class="ty">istream</span><span class="op">&amp;</span> in, <span class="cl">Vector2D</span><span class="op">&amp;</span> v) {
+    in <span class="op">&gt;&gt;</span> v.x <span class="op">&gt;&gt;</span> v.y;
+    <span class="kw">return</span> in;
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 8 -->
+<section class="module" id="m8">
+  <div class="module-header">
+    <div class="module-number">MODULE 08</div>
+    <h2>Generic Programming &amp; Templates</h2>
+  </div>
+
+  <div class="section">
+    <h3>8.1 Function Templates vs. Class Templates</h3>
+    <ul class="def-list">
+      <li><span class="def-key">Function Template</span><span class="def-val">Generic algorithm that accepts type parameters. Compiler generates concrete code per type at compile time (template instantiation).</span></li>
+      <li><span class="def-key">Class Template</span><span class="def-val">Generic data structure (stack, list, container) that stores/operates on any type.</span></li>
+      <li><span class="def-key">Specialization</span><span class="def-val">Custom implementation of a template for a specific type, when the generic version behaves incorrectly (e.g., <code>const char*</code> comparison compares pointer addresses, not string content).</span></li>
+    </ul>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Class Template &amp; Full Template Specialization</div>
+    </div>
+    <pre><span class="cm">// Class Template — generic container</span>
+<span class="kw">template</span> <span class="op">&lt;</span><span class="kw">class</span> T<span class="op">&gt;</span>
+<span class="kw">class</span> <span class="cl">StorageContainer</span> {
+<span class="kw">private</span>:
+    T item;
+<span class="kw">public</span>:
+    <span class="fn">StorageContainer</span>(T target) : item(target) {}
+    <span class="kw">void</span> <span class="fn">print</span>() <span class="kw">const</span> { std::cout <span class="op">&lt;&lt;</span> item <span class="op">&lt;&lt;</span> <span class="str">"\n"</span>; }
+};
+
+<span class="cm">// Function Template — generic equality check</span>
+<span class="kw">template</span> <span class="op">&lt;</span><span class="kw">typename</span> T<span class="op">&gt;</span>
+<span class="ty">bool</span> <span class="fn">isEqual</span>(T a, T b) { <span class="kw">return</span> a <span class="op">==</span> b; }
+
+<span class="cm">// Full Specialization for const char* (compares text content, not pointer addresses)</span>
+<span class="kw">template</span> <span class="op">&lt;&gt;</span>
+<span class="ty">bool</span> <span class="fn">isEqual</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ty">char</span><span class="op">*&gt;</span>(<span class="kw">const</span> <span class="ty">char</span><span class="op">*</span> a, <span class="kw">const</span> <span class="ty">char</span><span class="op">*</span> b) {
+    <span class="kw">return</span> std::<span class="fn">strcmp</span>(a, b) <span class="op">==</span> <span class="num">0</span>;  <span class="cm">// lexicographic compare, not address compare</span>
+}
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="cl">StorageContainer</span><span class="op">&lt;</span><span class="ty">int</span><span class="op">&gt;</span> c1(<span class="num">500</span>);
+    <span class="cl">StorageContainer</span><span class="op">&lt;</span><span class="ty">double</span><span class="op">&gt;</span> c2(<span class="num">3.14</span>);
+    c1.<span class="fn">print</span>(); c2.<span class="fn">print</span>();
+
+    <span class="kw">const</span> <span class="ty">char</span><span class="op">*</span> s1 <span class="op">=</span> <span class="str">"FAST-NU"</span>, <span class="op">*</span>s2 <span class="op">=</span> <span class="str">"FAST-NU"</span>;
+    std::cout <span class="op">&lt;&lt;</span> <span class="fn">isEqual</span>(s1, s2);  <span class="cm">// Calls specialization → 1 (true)</span>
+    std::cout <span class="op">&lt;&lt;</span> <span class="fn">isEqual</span>(<span class="num">10</span>, <span class="num">10</span>);   <span class="cm">// Calls generic → 1 (true)</span>
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 9 -->
+<section class="module" id="m9">
+  <div class="module-header">
+    <div class="module-number">MODULE 09</div>
+    <h2>File Handling &amp; Stream Operations</h2>
+  </div>
+
+  <div class="section">
+    <h3>9.1 File Stream Classes &amp; Modes</h3>
+    <table class="compare-table">
+      <thead><tr><th>Class</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>ofstream</td><td>Output stream — write to files</td></tr>
+        <tr><td>ifstream</td><td>Input stream — read from files</td></tr>
+        <tr><td>fstream</td><td>Both read and write</td></tr>
+      </tbody>
+    </table>
+    <ul class="def-list">
+      <li><span class="def-key">ios::in</span><span class="def-val">Open for reading</span></li>
+      <li><span class="def-key">ios::out</span><span class="def-val">Open for writing (overwrites existing)</span></li>
+      <li><span class="def-key">ios::app</span><span class="def-val">Append to end of file without erasing</span></li>
+      <li><span class="def-key">ios::binary</span><span class="def-val">Raw byte mode — required for object serialization</span></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>9.2 Seek &amp; Tell Pointer Operations</h3>
+    <table class="compare-table">
+      <thead><tr><th>Function</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>seekg(offset, dir)</td><td>Read (get)</td><td>Move the read pointer to a position</td></tr>
+        <tr><td>tellg()</td><td>Read (get)</td><td>Return current byte position of read pointer</td></tr>
+        <tr><td>seekp(offset, dir)</td><td>Write (put)</td><td>Move the write pointer to a position</td></tr>
+        <tr><td>tellp()</td><td>Write (put)</td><td>Return current byte position of write pointer</td></tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text2); font-size:0.9rem;">Direction anchors: <code>ios::beg</code> (from start) · <code>ios::cur</code> (from current) · <code>ios::end</code> (from end)</p>
+
+    <div class="callout warn">
+      <strong>⚠ Pointer Serialization Danger</strong>
+      Binary-writing an object with <code>std::string</code> or raw pointer members saves only the pointer's <em>memory address</em> — not the actual heap data. On reload that address is invalid → segfault. Use flat <code>char[N]</code> arrays for binary-safe serialization.
+    </div>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Binary File I/O with seekg Random Access</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">BookRecord</span> {
+<span class="kw">public</span>:
+    <span class="ty">char</span> title[<span class="num">50</span>];   <span class="cm">// ✓ flat char array — binary-safe</span>
+    <span class="ty">int</span> pages;
+    <span class="fn">BookRecord</span>(<span class="kw">const</span> <span class="ty">char</span><span class="op">*</span> t <span class="op">=</span> <span class="str">""</span>, <span class="ty">int</span> p <span class="op">=</span> <span class="num">0</span>) : pages(p) { std::<span class="fn">strcpy</span>(title, t); }
+};
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="cm">// Write two records to binary file</span>
+    std::<span class="ty">ofstream</span> out(<span class="str">"library.bin"</span>, std::ios::binary);
+    <span class="cl">BookRecord</span> b1(<span class="str">"Calculus Vol I"</span>, <span class="num">840</span>), b2(<span class="str">"Data Structures"</span>, <span class="num">520</span>);
+    out.<span class="fn">write</span>(<span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="ty">char</span><span class="op">*&gt;</span>(<span class="op">&amp;</span>b1), <span class="kw">sizeof</span>(<span class="cl">BookRecord</span>));
+    out.<span class="fn">write</span>(<span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="ty">char</span><span class="op">*&gt;</span>(<span class="op">&amp;</span>b2), <span class="kw">sizeof</span>(<span class="cl">BookRecord</span>));
+    out.<span class="fn">close</span>();
+
+    <span class="cm">// Read ONLY the 2nd record using seekg</span>
+    std::<span class="ty">ifstream</span> in(<span class="str">"library.bin"</span>, std::ios::binary);
+    <span class="cl">BookRecord</span> target;
+    in.<span class="fn">seekg</span>(<span class="num">1</span> <span class="op">*</span> <span class="kw">sizeof</span>(<span class="cl">BookRecord</span>), std::ios::beg);  <span class="cm">// jump over record 0</span>
+    std::cout <span class="op">&lt;&lt;</span> <span class="str">"Read pos: "</span> <span class="op">&lt;&lt;</span> in.<span class="fn">tellg</span>() <span class="op">&lt;&lt;</span> <span class="str">"\n"</span>;
+    in.<span class="fn">read</span>(<span class="kw">reinterpret_cast</span><span class="op">&lt;</span><span class="ty">char</span><span class="op">*&gt;</span>(<span class="op">&amp;</span>target), <span class="kw">sizeof</span>(<span class="cl">BookRecord</span>));
+    std::cout <span class="op">&lt;&lt;</span> target.title <span class="op">&lt;&lt;</span> <span class="str">"\n"</span>;  <span class="cm">// "Data Structures"</span>
+    in.<span class="fn">close</span>();
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ MODULE 10 -->
+<section class="module" id="m10">
+  <div class="module-header">
+    <div class="module-number">MODULE 10</div>
+    <h2>Advanced Exception Handling</h2>
+  </div>
+
+  <div class="section">
+    <h3>10.1 try / throw / catch Flow</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 620 130" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace">
+        <rect x="10" y="30" width="120" height="60" rx="4" fill="#0d1b30" stroke="#00b8d4" stroke-width="1.5"/>
+        <text x="70" y="55" fill="#00b8d4" font-size="11" text-anchor="middle" font-family="Syne,sans-serif">try {}</text>
+        <text x="70" y="75" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Protected code block</text>
+
+        <line x1="130" y1="60" x2="165" y2="60" stroke="#ffd166" stroke-width="1.5" marker-end="url(#ath)"/>
+        <text x="147" y="55" fill="#ffd166" font-size="8">throws</text>
+
+        <rect x="165" y="30" width="130" height="60" rx="4" fill="#0d1b30" stroke="#ffd166" stroke-width="1.5"/>
+        <text x="230" y="52" fill="#ffd166" font-size="11" text-anchor="middle" font-family="Syne,sans-serif">throw obj</text>
+        <text x="230" y="70" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Passes exception up stack.</text>
+        <text x="230" y="82" fill="#7a9ec0" font-size="8.5" text-anchor="middle">Stack unwinding begins.</text>
+
+        <line x1="295" y1="60" x2="330" y2="60" stroke="#00d4aa" stroke-width="1.5" marker-end="url(#atg)"/>
+        <text x="312" y="55" fill="#00d4aa" font-size="8">catches</text>
+
+        <rect x="330" y="10" width="130" height="55" rx="4" fill="#0d1b30" stroke="#00d4aa" stroke-width="1.5"/>
+        <text x="395" y="32" fill="#00d4aa" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">catch(MyEx&amp; e)</text>
+        <text x="395" y="50" fill="#7a9ec0" font-size="8" text-anchor="middle">Type-specific handler</text>
+
+        <rect x="330" y="75" width="130" height="45" rx="4" fill="#0d1b30" stroke="#7c6bff" stroke-width="1.5"/>
+        <text x="395" y="97" fill="#7c6bff" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">catch(...)</text>
+        <text x="395" y="113" fill="#7a9ec0" font-size="8" text-anchor="middle">Catch-all fallback</text>
+
+        <line x1="460" y1="37" x2="500" y2="55" stroke="#00d4aa" stroke-width="1" stroke-dasharray="3"/>
+        <line x1="460" y1="97" x2="500" y2="75" stroke="#7c6bff" stroke-width="1" stroke-dasharray="3"/>
+
+        <rect x="500" y="35" width="110" height="50" rx="4" fill="#0d1b30" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="555" y="57" fill="#4ade80" font-size="10" text-anchor="middle" font-family="Syne,sans-serif">Program</text>
+        <text x="555" y="73" fill="#4ade80" font-size="10" text-anchor="middle">continues</text>
+
+        <defs>
+          <marker id="ath" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#ffd166"/>
+          </marker>
+          <marker id="atg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#00d4aa"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <h4>Key Rules</h4>
+    <ul class="rule-list">
+      <li>Catch exceptions <strong>by reference</strong> (<code>const MyEx&amp;</code>) — avoids object slicing and unnecessary copying.</li>
+      <li>Stack unwinding during exception propagation automatically calls destructors of all local objects — preventing leaks.</li>
+      <li><strong>Never throw from a destructor.</strong> If a destructor throws while another exception is active, <code>std::terminate()</code> is called immediately.</li>
+      <li>Custom exceptions should inherit from <code>std::exception</code> and override <code>what() const noexcept</code>.</li>
+    </ul>
+  </div>
+
+  <div class="code-wrap">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <div class="code-lang">C++ — Custom Exception + Stack Unwinding Demo</div>
+    </div>
+    <pre><span class="kw">class</span> <span class="cl">DuplicateItemException</span> : <span class="kw">public</span> std::<span class="cl">exception</span> {
+<span class="kw">private</span>:
+    std::<span class="ty">string</span> msg;
+<span class="kw">public</span>:
+    <span class="fn">DuplicateItemException</span>(std::<span class="ty">string</span> ctx) {
+        msg <span class="op">=</span> <span class="str">"Duplicate: "</span> <span class="op">+</span> ctx <span class="op">+</span> <span class="str">" already exists!"</span>;
+    }
+    <span class="cm">// Override what() with noexcept guarantee</span>
+    <span class="kw">const</span> <span class="ty">char</span><span class="op">*</span> <span class="fn">what</span>() <span class="kw">const</span> <span class="kw">noexcept</span> <span class="kw">override</span> { <span class="kw">return</span> msg.<span class="fn">c_str</span>(); }
+};
+
+<span class="kw">class</span> <span class="cl">Tracker</span> {
+<span class="kw">public</span>:
+    <span class="fn">Tracker</span>() { std::cout <span class="op">&lt;&lt;</span> <span class="str">"Tracker allocated\n"</span>; }
+    <span class="op">~</span><span class="fn">Tracker</span>() { std::cout <span class="op">&lt;&lt;</span> <span class="str">"Tracker freed (stack unwinding)\n"</span>; }
+};
+
+<span class="kw">void</span> <span class="fn">validate</span>() {
+    <span class="cl">Tracker</span> t;                  <span class="cm">// Local object — destructor will run on exception</span>
+    <span class="kw">throw</span> <span class="cl">DuplicateItemException</span>(<span class="str">"Textbook"</span>);  <span class="cm">// ← throws here</span>
+}
+
+<span class="ty">int</span> <span class="fn">main</span>() {
+    <span class="kw">try</span> {
+        <span class="fn">validate</span>();
+    }
+    <span class="kw">catch</span> (<span class="kw">const</span> <span class="cl">DuplicateItemException</span><span class="op">&amp;</span> e) {  <span class="cm">// ← by reference, no slicing</span>
+        std::cout <span class="op">&lt;&lt;</span> e.<span class="fn">what</span>() <span class="op">&lt;&lt;</span> <span class="str">"\n"</span>;
+    }
+    <span class="kw">catch</span> (<span class="kw">const</span> std::<span class="cl">exception</span><span class="op">&amp;</span> e) {  <span class="cm">// Generic fallback</span>
+        std::cout <span class="op">&lt;&lt;</span> <span class="str">"std error: "</span> <span class="op">&lt;&lt;</span> e.<span class="fn">what</span>();
+    }
+    <span class="kw">catch</span> (...) {                          <span class="cm">// Catch-all for unknown throws</span>
+        std::cout <span class="op">&lt;&lt;</span> <span class="str">"Unknown exception\n"</span>;
+    }
+    std::cout <span class="op">&lt;&lt;</span> <span class="str">"Program continues normally.\n"</span>;
+}</pre>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════ CHECKLIST -->
+<section class="module" id="checklist">
+  <div class="module-header">
+    <div class="module-number">EXAM PREP</div>
+    <h2>Pro Checklist &amp; Final Strategy</h2>
+  </div>
+
+  <div class="callout gold">
+    <strong>★ Study Strategy</strong>
+    Focus on tracing — write out console output by hand. Examiners love output-tracing questions for constructors/destructors and virtual dispatch.
+  </div>
+
+  <ul class="checklist">
+    <li><strong>Memory Model Tracing:</strong> Hand-draw object graphs. Identify shallow copy leaks, dangling pointers, and missing virtual destructors.</li>
+    <li><strong>Lifecycle Sequencing:</strong> Memorize constructor/destructor order for multi-level inheritance. Write out step-by-step console output.</li>
+    <li><strong>VTABLE Mechanics:</strong> Be able to draw the object → vptr → VTABLE → function code chain and explain how runtime dispatch works.</li>
+    <li><strong>Const Rules:</strong> Know why const fields require the initializer list; why const objects can only call const methods.</li>
+    <li><strong>Static Rules:</strong> Static functions have no <code>this</code>. They can only access static members. Must be defined outside the class globally.</li>
+    <li><strong>Rule of Three:</strong> If a class has a destructor that <code>delete</code>s memory, it also needs a deep copy constructor and overloaded assignment operator.</li>
+    <li><strong>Diamond Problem Fix:</strong> <code>virtual public</code> inheritance + ChildD directly initializes GrandParent in its own initializer list.</li>
+    <li><strong>Stream Operators:</strong> <code>&lt;&lt;</code> and <code>&gt;&gt;</code> must be friend functions — left-hand operand is ostream/istream which you can't modify.</li>
+    <li><strong>Prefix vs Postfix:</strong> Postfix takes a dummy <code>int</code> parameter and returns old value by value; prefix returns reference to updated <code>*this</code>.</li>
+    <li><strong>Template Specialization:</strong> Needed when generic logic fails for specific types (e.g., <code>const char*</code> pointer comparison vs. <code>strcmp</code>).</li>
+    <li><strong>Binary File Safety:</strong> Never serialize objects with <code>std::string</code> or pointer members to binary. Use flat <code>char[N]</code> arrays only.</li>
+    <li><strong>noexcept Destructors:</strong> Throwing from a destructor during unwinding calls <code>std::terminate()</code>. Always mark them noexcept or handle internally.</li>
+    <li><strong>Catch by Reference:</strong> Always catch exceptions as <code>const ExType&amp;</code> — avoids object slicing and unnecessary copy construction.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  C++ OOP Complete Guide · NUCES Karachi · Modules 1–10 · Prepared for Examination
+</footer>
+
+</body>
+</html>
